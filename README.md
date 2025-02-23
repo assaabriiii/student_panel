@@ -78,7 +78,7 @@ The application will be available at `http://localhost:8000` and live on `http:/
 
 ## License
 
-This project is licensed under the [Apache License](https://github.com/assaabriiii/student_panel/blob/main/LICENCE).
+This project is licensed under the [Apache License]("https://github.com/assaabriiii/student_panel/blob/main/LICENCE").
 
 ## Contact
 
