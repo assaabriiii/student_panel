@@ -22,3 +22,15 @@ class Feedback(models.Model):
     
     def __str__(self):
         return f"Feedback for {self.student.university_number} - {self.exercise.title}"
+
+class Comment(models.Model):
+    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE, related_name='comments')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['created_at']
+    
+    def __str__(self):
+        return f"Comment by {self.student.university_number} on {self.feedback}"
