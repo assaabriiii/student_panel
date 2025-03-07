@@ -1,6 +1,9 @@
 # Feedback Platform
 
 A web-based feedback platform built with Django.
+I've made this project for managing my class
+
+![preview](img.png "preview")
 
 ## Description
 
