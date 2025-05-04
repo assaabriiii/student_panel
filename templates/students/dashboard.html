@@ -30,6 +30,29 @@
         </div>
     </div>
 
+    <!-- Subjects and Professors Section -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title h5 mb-0">Your Subjects & Professors</h3>
+            </div>
+            <div class="card-body">
+                {% if user.subjects.exists %}
+                    <ul class="list-group">
+                        {% for subject in user.subjects.all %}
+                            <li class="list-group-item">
+                                <strong>{{ subject.name }}</strong><br>
+                                <span class="text-muted">Professor: {{ subject.professor.user.get_full_name|default_if_none:"N/A" }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">No subjects assigned yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     <!-- Feedback History Section -->
     <div class="col-md-8">
         <div class="card">

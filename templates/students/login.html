@@ -6,11 +6,26 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title text-center mb-4">Student Login</h2>
+                <h2 class="card-title text-center mb-4">Login</h2>
                 <p class="text-center text-muted mb-4">Enter your university number to access your feedback</p>
                 <form method="post">
                     {% csrf_token %}
                     {{ form|crispy }}
+                    <div class="mb-3">
+                        <label class="form-label">Login as:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="role_student" value="student" checked>
+                            <label class="form-check-label" for="role_student">Student</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="role_professor" value="professor">
+                            <label class="form-check-label" for="role_professor">Professor</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="role_ta" value="ta">
+                            <label class="form-check-label" for="role_ta">TA</label>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
             </div>

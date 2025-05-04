@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4>TA Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Attendance Management</h5>
+                    {% if ta_subjects and ta_subjects.exists %}
+                        <ul class="list-group mb-4">
+                            {% for subject in ta_subjects %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ subject.name }}
+                                    <a href="{% url 'mark_attendance' subject.id %}" class="btn btn-outline-primary btn-sm">Mark Attendance</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-center">No subjects assigned as TA.</p>
+                    {% endif %}
+                    <hr>
+                    <h5>Exercise Management</h5>
+                    <form method="GET" action="{% url 'add_exercise' %}" class="mb-3">
+                        <button type="submit" class="btn btn-primary">Add Exercise</button>
+                    </form>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Exercise Title</th>
+                                <th>Subject</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exercise in exercises %}
+                            <tr>
+                                <td>{{ exercise.title }}</td>
+                                <td>{{ exercise.subject.name }}</td>
+                                <td>
+                                    <form method="POST" action="{% url 'delete_exercise' exercise.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3">No exercises found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -30,18 +30,43 @@
                             {% if comments %}
                                 <div class="comments-list mb-4">
                                     {% for comment in comments %}
+                                        {% if not comment.parent %}
                                         <div class="card mb-2">
                                             <div class="card-body">
                                                 <p class="mb-1">{{ comment.text }}</p>
                                                 <small class="text-muted">
                                                     By {{ comment.student.get_full_name }} 
-                                                    {% if comment.feedback.student == request.user %}
-                                                        (You)
-                                                    {% endif %}
+                                                    {% if comment.student == request.user %}(You){% endif %}
                                                     on {{ comment.created_at|date:"M d, Y H:i" }}
                                                 </small>
+                                                {% if comment.student == request.user %}
+                                                    <a href="{% url 'edit_comment' comment.id %}" class="btn btn-sm btn-outline-secondary ms-2">Edit</a>
+                                                    <a href="{% url 'delete_comment' comment.id %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                                {% endif %}
+                                                <!-- Reply form -->
+                                                <form method="POST" action="{% url 'reply_comment' comment.id %}" class="mt-2">
+                                                    {% csrf_token %}
+                                                    <div class="input-group">
+                                                        <input type="text" name="reply" class="form-control form-control-sm" placeholder="Reply..." required>
+                                                        <button type="submit" class="btn btn-sm btn-primary">Reply</button>
+                                                    </div>
+                                                </form>
+                                                <!-- Show replies -->
+                                                {% for reply in comment.replies.all %}
+                                                    <div class="card mt-2 ms-4">
+                                                        <div class="card-body">
+                                                            <p class="mb-1">{{ reply.text }}</p>
+                                                            <small class="text-muted">By {{ reply.student.get_full_name }}{% if reply.student == request.user %} (You){% endif %} on {{ reply.created_at|date:"M d, Y H:i" }}</small>
+                                                            {% if reply.student == request.user %}
+                                                                <a href="{% url 'edit_comment' reply.id %}" class="btn btn-sm btn-outline-secondary ms-2">Edit</a>
+                                                                <a href="{% url 'delete_comment' reply.id %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             {% else %}
