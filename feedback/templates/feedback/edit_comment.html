@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Edit Comment</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="comment">Comment</label>
+                            <textarea name="comment" id="comment" class="form-control" rows="4" required>{{ comment.text }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Update Comment</button>
+                        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-secondary mt-3 ms-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
