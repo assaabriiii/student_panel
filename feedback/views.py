@@ -5,6 +5,7 @@ from .models import Exercise, Feedback, Comment
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseForbidden
+from students.models import Student, Subject
 
 @login_required
 def exercise_detail(request, exercise_id):
@@ -90,3 +91,34 @@ def reply_comment(request, comment_id):
         )
         messages.success(request, 'Reply added successfully.')
     return redirect('exercise_detail', exercise_id=feedback.exercise.id)
+
+
+def student_classes_with_ta(request, university_number):
+    """
+    Returns JSON response with subjects (classes) the student is enrolled in that have at least one TA.
+    """
+    student = Student.objects.filter(university_number=university_number).first()
+    if not student:
+        return JsonResponse({'error': 'Student not found'}, status=404)
+    # Subjects the student is in, and that have at least one TA
+    subjects = Subject.objects.filter(students=student, tas__isnull=False).distinct()
+    data = [{'id': s.id, 'name': s.name} for s in subjects]
+    return JsonResponse({'subjects': data})
+
+def latest_exercises_with_ta(request, university_number):
+    """
+    Returns JSON response with the 5 latest exercises (by deadline) for subjects the student is in, where the subject has a TA.
+    """
+    student = Student.objects.filter(university_number=university_number).first()
+    if not student:
+        return JsonResponse({'error': 'Student not found'}, status=404)
+    subjects = Subject.objects.filter(students=student, tas__isnull=False).distinct()
+    exercises = Exercise.objects.filter(subject__in=subjects, deadline__isnull=False).order_by('-deadline')[:5]
+    data = [{
+        'id': e.id,
+        'title': e.title,
+        'subject': e.subject.name,
+        'deadline': e.deadline,
+        'description': e.description
+    } for e in exercises]
+    return JsonResponse({'exercises': data})

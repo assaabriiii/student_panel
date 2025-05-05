@@ -33,7 +33,7 @@ class ExerciseForm(forms.ModelForm):
             self.fields['subject'].queryset = ta_subjects
     class Meta:
         model = Exercise
-        fields = ['title', 'description', 'subject', 'number_of_questions']
+        fields = ['title', 'description', 'subject', 'number_of_questions', 'deadline']
         widgets = {
             'description': forms.Textarea(attrs={'rows':4}),
         }

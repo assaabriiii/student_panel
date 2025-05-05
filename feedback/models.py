@@ -7,6 +7,7 @@ class Exercise(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='exercises')
     number_of_questions = models.PositiveIntegerField(default=0)
+    deadline = models.DateField(null=True, blank=True)
     
     def __str__(self):
         return self.title
