@@ -65,6 +65,7 @@ def mark_attendance(request, subject_id):
         return HttpResponseForbidden("You are not authorized to mark attendance for this subject.")
 
     subject = get_object_or_404(Subject, id=subject_id)
+    print(subject_id)
     students = list(subject.students.all())
     today = date.today()
 
@@ -79,6 +80,8 @@ def mark_attendance(request, subject_id):
     session_dates = session_dates[:N]
     session_dates = sorted(session_dates)
 
+    # Filter session_dates to include only those that match the subject's specified day_of_week
+    session_dates = [date for date in session_dates if date.strftime('%A') == subject.day_of_week]
     # Build attendance matrix: {student_id: {date: present}}
     attendance_matrix = {student.id: {} for student in students}
     presences = Presence.objects.filter(subject=subject, date__in=session_dates)
@@ -88,6 +91,7 @@ def mark_attendance(request, subject_id):
     if request.method == 'POST':
         for student in students:
             present = request.POST.get(f'student_{student.id}') == 'on'
+            print(student.id)
             Presence.objects.update_or_create(
                 subject=subject,
                 student=student,

@@ -5,6 +5,16 @@ class Subject(models.Model):
     name = models.CharField(max_length=100)
     professor = models.ForeignKey('Professor', on_delete=models.CASCADE, related_name='subjects')
     students = models.ManyToManyField('Student', related_name='subjects')
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+        ('Sunday', 'Sunday'),
+    ]
+    day_of_week = models.CharField(max_length=9, choices=DAY_CHOICES, default="Monday")
     # number_of_questions = models.PositiveIntegerField(default=0)
 
     def __str__(self):
