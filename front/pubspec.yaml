@@ -37,6 +37,7 @@ dependencies:
   equatable: ^2.0.7
   google_fonts: ^6.2.1
   dotted_border: ^2.1.0
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:
