@@ -20,7 +20,7 @@
             <td style="position:sticky;left:0;background:#fff;z-index:1;text-align:left;white-space:nowrap;">{{ student.get_full_name }} ({{ student.university_number }})</td>
             {% for session_date in session_dates %}
               <td>
-                {% if session_date == today %}
+                {% if session_date|date:"l" == subject.day_of_week %}
                   <input type="checkbox" name="student_{{ student.id }}" {% if student.id in present_ids %}checked{% endif %} />
                 {% else %}
                   {% if attendance_matrix and attendance_matrix.student_id and attendance_matrix.student_id.session_date %}

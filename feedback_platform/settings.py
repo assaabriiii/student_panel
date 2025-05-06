@@ -10,6 +10,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'API',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -83,5 +86,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Custom authentication backend
 AUTHENTICATION_BACKENDS = [
-    'students.auth.UniversityNumberBackend',
+    'students.auth.UniversityNumberBackend'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
