@@ -43,6 +43,17 @@
                             <li class="list-group-item">
                                 <strong>{{ subject.name }}</strong><br>
                                 <span class="text-muted">Professor: {{ subject.professor.user.get_full_name|default_if_none:"N/A" }}</span>
+                                {% if subject.tas.exists %}
+                                    <br><span class="text-muted">
+                                        {% with tas=subject.tas.all %}
+                                            {% if tas|length == 1 %}
+                                                TA: {{ tas.0.get_full_name }}
+                                            {% elif tas|length > 1 %}
+                                                TAs: {% for ta in tas %}{{ ta.get_full_name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                                            {% endif %}
+                                        {% endwith %}
+                                    </span>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
