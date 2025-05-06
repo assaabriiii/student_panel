@@ -24,3 +24,15 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['id', 'exercise', 'mistakes', 'suggestions', 'score', 'created_at']
+
+class MarkAttendanceSerializer(serializers.Serializer):
+    subject_id = serializers.IntegerField()
+
+    class AttendanceRecordSerializer(serializers.Serializer):
+        student_id = serializers.IntegerField()
+        present = serializers.BooleanField()
+
+    attendance = serializers.ListField(child=AttendanceRecordSerializer())
+
+    class Meta:
+        fields = ['subject_id', 'attendance']
