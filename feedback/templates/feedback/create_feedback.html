@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4>Create Feedback</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ field.label }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class="mb-3">
+                            {{ form.student.label_tag }}
+                            {{ form.student }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.exercise.label_tag }}
+                            {{ form.exercise }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.mistakes.label_tag }}
+                            {{ form.mistakes }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.score.label_tag }}
+                            {{ form.score }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Feedback</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
