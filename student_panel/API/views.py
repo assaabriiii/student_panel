@@ -5,8 +5,10 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
-from .serializers import StudentLoginSerializer, CourseSerializer
-from .models import Student, Course
+from .serializers import StudentLoginSerializer, CourseSerializer, ExerciseSerializer
+from .models import Student, Course, Exercise
+from datetime import date
+
 
 class StudentLoginView(APIView):
     def post(self, request):
@@ -26,6 +28,7 @@ class StudentLoginView(APIView):
                 return Response({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class StudentCoursesView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -38,3 +41,36 @@ class StudentCoursesView(APIView):
         courses = student.enrolled_courses.all()
         serializer = CourseSerializer(courses, many=True)
         return Response({'courses': serializer.data})
+
+
+class StudentExerciseView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        try:
+            student = Student.objects.get(user=user)
+        except Student.DoesNotExist:
+            return Response({'error': 'No student profile found for this user.'}, status=status.HTTP_403_FORBIDDEN)
+        curr_courses = student.enrolled_courses.filter()
+        exercises = Exercise.objects.filter(course__in=curr_courses)
+        serializer = ExerciseSerializer(exercises, many=True)
+        return Response({'exercises': serializer.data})
+    
+
+class StudentCurrExerciseView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        try:
+            student = Student.objects.get(user=user)
+        except Student.DoesNotExist:
+            return Response({'error': 'No student profile found for this user.'}, status=status.HTTP_403_FORBIDDEN)
+        today = date.today()
+        curr_courses = student.enrolled_courses.filter(
+            end_date__gte=today
+        )
+        exercises = Exercise.objects.filter(course__in=curr_courses)
+        serializer = ExerciseSerializer(exercises, many=True)
+        return Response({'exercises': serializer.data})

@@ -48,6 +48,12 @@ class Course(models.Model):
         through='TAAssignment',
         related_name='ta_courses'
     )
+    start_date = models.DateField(
+        help_text="Date when this course begins",
+    )
+    end_date = models.DateField(
+        help_text="Date when this course ends",
+    )
 
     def __str__(self):
         return f"{self.code}: {self.title}"
