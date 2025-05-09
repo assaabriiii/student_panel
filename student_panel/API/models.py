@@ -163,3 +163,55 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Feedback by {self.ta} on submission {self.submission_id}"
+
+# not tested
+class Comment(models.Model):
+    comment_id = models.AutoField(primary_key=True)
+    exercise = models.ForeignKey(
+        Exercise,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='replies',
+        help_text='Parent comment for threaded replies'
+    )
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Comment {self.comment_id} by {self.author}"
+
+# not tested
+class Announcement(models.Model):
+    announcement_id = models.AutoField(primary_key=True)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='announcements'
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='announcements'
+    )
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"[{self.course.code}] {self.title}"
